@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "382139243984",
+    "firebase_url": "https://reciper-9eba7-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "reciper-9eba7",
+    "storage_bucket": "reciper-9eba7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:382139243984:android:869e2378c1cb04c73b2dd5",
+        "android_client_info": {
+          "package_name": "com.tekin.reciper"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLCl_HoImaSgZ7NypSmqke6EbN2HHoukE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
