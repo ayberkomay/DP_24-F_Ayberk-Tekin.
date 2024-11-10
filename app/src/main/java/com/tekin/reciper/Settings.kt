@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.tekin.reciper.databinding.FragmentSettingsBinding
@@ -17,10 +19,11 @@ import com.tekin.reciper.databinding.FragmentSettingsBinding
 *  personal informations,
 *  profile photo
 *  my receipts area?*/
-
 class Settings : Fragment(R.layout.fragment_settings) {
+
     private lateinit var auth: FirebaseAuth
     private lateinit var binding: FragmentSettingsBinding
+    private var backToRegisterOnce: Boolean = false // Add this variable
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -51,7 +54,7 @@ class Settings : Fragment(R.layout.fragment_settings) {
             }
 
         } else {
-            // Not signed in.
+            // Not signed in
             signedInLayout.visibility = View.GONE
             signedOutLayout.visibility = View.VISIBLE
             registerLayout.visibility = View.GONE
@@ -64,9 +67,9 @@ class Settings : Fragment(R.layout.fragment_settings) {
                 val email = binding.textMail.text.toString().trim()
                 val password = binding.textPassword.text.toString().trim()
 
-                if(email.isNotEmpty() && password.isNotEmpty()){
-                    auth.signInWithEmailAndPassword(email, password).addOnCompleteListener{ signin ->
-                        if(signin.isSuccessful){
+                if (email.isNotEmpty() && password.isNotEmpty()) {
+                    auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { signin ->
+                        if (signin.isSuccessful) {
                             val currentUser = auth.currentUser
                             currentUser?.let {
                                 Toast.makeText(context, "Successful", Toast.LENGTH_LONG).show()
@@ -77,20 +80,20 @@ class Settings : Fragment(R.layout.fragment_settings) {
 
                                 binding.textUserEmail.text = currentUser.email
                             }
-                        }else{
+                        } else {
                             val errorMessage = signin.exception?.message
-                            Toast.makeText(context,"$errorMessage",Toast.LENGTH_LONG).show()
+                            Toast.makeText(context, "$errorMessage", Toast.LENGTH_LONG).show()
                         }
                     }
-                }else{
-                    Toast.makeText(context,"Please fill in all fields.",Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(context, "Please fill in all fields.", Toast.LENGTH_LONG).show()
                 }
-
             }
 
             // Register sender
             btnRegisterSender.setOnClickListener {
-                // Register screen
+                backToRegisterOnce = true
+                // Show register screen
                 signedInLayout.visibility = View.GONE
                 signedOutLayout.visibility = View.GONE
                 registerLayout.visibility = View.VISIBLE
@@ -113,10 +116,10 @@ class Settings : Fragment(R.layout.fragment_settings) {
                                 if (register.isSuccessful) {
                                     val newUser = auth.currentUser
                                     newUser?.let {
-                                        // Successful registered, get unique uid
+                                        // Successful registration, get unique uid
                                         val userId = it.uid
                                         val userData = UserData(email, name, surname, phone, date)
-                                        // Register database infos with uid
+                                        // Save user data to database with uid
                                         usersRef.child(userId).setValue(userData)
                                         Toast.makeText(context, "Successful", Toast.LENGTH_LONG).show()
                                         signedInLayout.visibility = View.VISIBLE
@@ -134,12 +137,42 @@ class Settings : Fragment(R.layout.fragment_settings) {
                         Toast.makeText(context, "Please fill in all fields.", Toast.LENGTH_LONG).show()
                     }
                 }
-                btnRegisterBack.setOnClickListener{
+
+                btnRegisterBack.setOnClickListener {
+                    // Go back to sign-in screen
                     signedInLayout.visibility = View.GONE
                     signedOutLayout.visibility = View.VISIBLE
                     registerLayout.visibility = View.GONE
                 }
             }
         }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                when {
+                    registerLayout.visibility == View.VISIBLE -> {
+                        // If registerLayout is visible, go back to signedOutLayout
+                        registerLayout.visibility = View.GONE
+                        signedOutLayout.visibility = View.VISIBLE
+                        signedInLayout.visibility = View.GONE
+                    }
+                    signedOutLayout.visibility == View.VISIBLE -> {
+                        if (backToRegisterOnce) {
+                            // Go back to register view once
+                            registerLayout.visibility = View.VISIBLE
+                            signedOutLayout.visibility = View.GONE
+                            signedInLayout.visibility = View.GONE
+                            backToRegisterOnce = false
+                        } else {
+                            isEnabled = false
+                            requireActivity().onBackPressedDispatcher.onBackPressed()
+                        }
+                    }
+                    else -> {
+                        isEnabled = false
+                        requireActivity().onBackPressedDispatcher.onBackPressed()
+                    }
+                }
+            }
+        })
     }
 }
