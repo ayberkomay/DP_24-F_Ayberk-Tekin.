@@ -36,13 +36,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:text="Giriş Yap" />
+            android:text="Sign In" />
 
         <Button
             android:id="@+id/buttonRegisterSender"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Kayıt Ol" />
+            android:text="Register" />
 
     </LinearLayout>
 
@@ -107,13 +107,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:text="Kayıt Ol" />
+            android:text="Register" />
 
         <Button
             android:id="@+id/buttonRegisterBack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Geri Dön" />
+            android:text="Sign In" />
 
     </LinearLayout>
 
@@ -131,7 +131,7 @@
             android:id="@+id/textUserEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Kullanıcı Emaili"
+            android:text="Mail"
             android:textSize="18sp"
             android:layout_marginBottom="24dp" />
 
@@ -139,7 +139,7 @@
             android:id="@+id/buttonSignout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Çıkış Yap" />
+            android:text="Exit" />
     </LinearLayout>
 
 </FrameLayout>
