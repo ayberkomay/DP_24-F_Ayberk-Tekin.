@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.tekin.reciper"
-        minSdk = 24
+        minSdk = 26 //changed with android 8
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -45,6 +45,11 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-database")
 
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+    implementation("androidx.activity:activity-ktx:1.8.1")
+    implementation ("androidx.fragment:fragment-ktx:1.6.1")
+
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -55,4 +60,5 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation(kotlin("script-runtime"))
 }

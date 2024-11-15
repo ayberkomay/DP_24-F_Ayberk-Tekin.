@@ -1,6 +1,6 @@
 package com.tekin.reciper
 
-class UserData(
+data class UserData(
     var email: String = "",
     var name: String = "",
     var surname: String = "",
