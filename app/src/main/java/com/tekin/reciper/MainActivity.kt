@@ -13,8 +13,11 @@ import com.tekin.reciper.ui.User.UserNotSignedIn
 import com.tekin.reciper.ui.User.UserSignedIn
 
 
-// Update pngs according to dpi
+// Update pngs according to dpi?
 // Back button and fragment redirections are don't update to navigation panel
+// Error messages needs to improve?
+// There's a problem with updating mail adress and profile image!
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding

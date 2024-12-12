@@ -24,7 +24,6 @@ class UserNotSignedIn : Fragment(R.layout.fragment_user_not_signedin) {
             val btnSignin = binding.buttonSignin
             val btnRegisterSender = binding.buttonRegisterSender
 
-            // Sign in button
             btnSignin.setOnClickListener {
                 val email = binding.textMail.text.toString().trim()
                 val password = binding.textPassword.text.toString().trim()
@@ -35,7 +34,6 @@ class UserNotSignedIn : Fragment(R.layout.fragment_user_not_signedin) {
                             Toast.makeText(context, "Successful", Toast.LENGTH_LONG).show()
                             parentFragmentManager.beginTransaction()
                                 .replace(R.id.frame_layout, UserSignedIn())
-                                .addToBackStack(null)
                                 .commit()
                         }else{
                             Toast.makeText(context, "Sign-in failed. Please try again.", Toast.LENGTH_LONG).show()
@@ -47,7 +45,6 @@ class UserNotSignedIn : Fragment(R.layout.fragment_user_not_signedin) {
 
             }
 
-            // Register sender
             btnRegisterSender.setOnClickListener {
                 parentFragmentManager.beginTransaction()
                     .replace(R.id.frame_layout, Register())

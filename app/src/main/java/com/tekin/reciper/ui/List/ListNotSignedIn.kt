@@ -19,7 +19,6 @@ class ListNotSignedIn: Fragment(R.layout.fragment_list_not_signedin){
         btnlistSignIn.setOnClickListener {
             parentFragmentManager.beginTransaction()
                 .replace(R.id.frame_layout, UserNotSignedIn())
-                .addToBackStack(null)
                 .commit()
         }
     }

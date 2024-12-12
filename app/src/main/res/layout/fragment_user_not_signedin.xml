@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Not Signed in -->
     <LinearLayout
         android:id="@+id/layoutSignedOut"
         android:layout_width="match_parent"
