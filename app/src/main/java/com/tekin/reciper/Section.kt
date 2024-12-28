@@ -11,7 +11,7 @@ import com.google.firebase.storage.FirebaseStorage
 class Section {
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
     private val usersRef = FirebaseDatabase.getInstance().getReference("users")
-    private val storageRef = FirebaseStorage.getInstance()
+    private val storageRef = FirebaseStorage.getInstance("gs://reciper-9eba7.firebasestorage.app")
 
     private val _currentUserData = MutableLiveData<UserData?>()
     val currentUserData: LiveData<UserData?> get() = _currentUserData
