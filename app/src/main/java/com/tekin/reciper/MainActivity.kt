@@ -5,19 +5,13 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.tekin.reciper.databinding.ActivityMainBinding
+import com.tekin.reciper.model.UserViewModel
 import com.tekin.reciper.ui.Home
-import com.tekin.reciper.ui.List.ListSignedIn
 import com.tekin.reciper.ui.List.ListNotSignedIn
+import com.tekin.reciper.ui.List.ListSignedIn
 import com.tekin.reciper.ui.Search
 import com.tekin.reciper.ui.User.UserNotSignedIn
 import com.tekin.reciper.ui.User.UserSignedIn
-
-
-// Update pngs according to dpi?
-// Back button and fragment redirections are don't update to navigation panel
-// Error messages needs to improve?
-// There's a problem with updating mail adress and profile image!
-
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -49,10 +43,26 @@ class MainActivity : AppCompatActivity() {
                         replaceFragment(UserNotSignedIn())
                     }
                 }
-                else -> {
-                }
             }
             true
+        }
+    }
+
+    override fun onBackPressed() {
+        if (supportFragmentManager.backStackEntryCount > 1) {
+            supportFragmentManager.popBackStack()
+            val currentFragment = supportFragmentManager.findFragmentById(R.id.frame_layout)
+            if (currentFragment is Home) {
+                binding.bottomnavigation.selectedItemId = R.id.nav_homebutton
+            } else if (currentFragment is Search) {
+                binding.bottomnavigation.selectedItemId = R.id.nav_searchbutton
+            } else if (currentFragment is ListSignedIn || currentFragment is ListNotSignedIn) {
+                binding.bottomnavigation.selectedItemId = R.id.nav_listbutton
+            } else if (currentFragment is UserSignedIn || currentFragment is UserNotSignedIn) {
+                binding.bottomnavigation.selectedItemId = R.id.nav_settingsbutton
+            }
+        } else {
+            super.onBackPressed()
         }
     }
 

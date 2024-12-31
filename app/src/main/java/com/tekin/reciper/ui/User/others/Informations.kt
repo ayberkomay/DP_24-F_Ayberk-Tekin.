@@ -1,6 +1,8 @@
-package com.tekin.reciper.ui.User
+package com.tekin.reciper.ui.User.others
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
@@ -8,14 +10,12 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.tekin.reciper.R
-import com.tekin.reciper.UserViewModel
+import com.tekin.reciper.model.UserViewModel
 import com.tekin.reciper.databinding.FragmentInformationsBinding
 
 class Informations : Fragment(R.layout.fragment_informations) {
     private val viewModel: UserViewModel by activityViewModels()
     private lateinit var binding: FragmentInformationsBinding
-
-    private var isEditing = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -45,6 +45,39 @@ class Informations : Fragment(R.layout.fragment_informations) {
         val changePasswordButton = binding.changePasswordButton
         val backButton = binding.backButton
 
+        dateEditText.addTextChangedListener(object : TextWatcher {
+            private var current = ""
+            private val dateDefault = "dd/MM/yyyy"
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (s.toString() != current) {
+                    val inputNumbers = s.toString().replace("[^\\d]".toRegex(), "")
+                    if (inputNumbers.length <= 8) {
+                        val sb = StringBuilder()
+                        var index = 0
+                        for (i in dateDefault.indices) {
+                            if (index < inputNumbers.length) {
+                                sb.append(inputNumbers[index])
+                                index++
+                                if ((i == 1 || i == 3) && index < inputNumbers.length) {
+                                    sb.append("/")
+                                }
+                            } else {
+                                break
+                            }
+                        }
+                        current = sb.toString()
+                        dateEditText.setText(current)
+                        dateEditText.setSelection(current.length)
+                    }
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        })
+
         viewModel.currentUserData.observe(viewLifecycleOwner) { userData ->
             if (userData != null) {
                 emailTextView.text = userData.email
@@ -56,11 +89,14 @@ class Informations : Fragment(R.layout.fragment_informations) {
                 surnameTextView.text = userData.surname
                 surnameEditText.setText(userData.surname)
 
-                phoneTextView.text = userData.phone
-                phoneEditText.setText(userData.phone)
+                val phoneStr = userData.phone?.toString() ?: ""
+                phoneTextView.text = phoneStr
+                phoneEditText.setText(phoneStr)
 
-                dateTextView.text = userData.date
-                dateEditText.setText(userData.date)
+                val dateStr = userData.date?.toString() ?: ""
+                val formattedDate = formatDateString(dateStr)
+                dateTextView.text = formattedDate
+                dateEditText.setText(formattedDate)
             } else {
                 Toast.makeText(context, "User data not available", Toast.LENGTH_SHORT).show()
             }
@@ -68,27 +104,22 @@ class Informations : Fragment(R.layout.fragment_informations) {
 
         editEmailButton.setOnClickListener {
             EditMode(emailTextView, emailEditText)
-            saveButton.visibility = View.VISIBLE
         }
 
         editNameButton.setOnClickListener {
             EditMode(nameTextView, nameEditText)
-            saveButton.visibility = View.VISIBLE
         }
 
         editSurnameButton.setOnClickListener {
             EditMode(surnameTextView, surnameEditText)
-            saveButton.visibility = View.VISIBLE
         }
 
         editPhoneButton.setOnClickListener {
             EditMode(phoneTextView, phoneEditText)
-            saveButton.visibility = View.VISIBLE
         }
 
         editDateButton.setOnClickListener {
             EditMode(dateTextView, dateEditText)
-            saveButton.visibility = View.VISIBLE
         }
 
         saveButton.setOnClickListener {
@@ -102,31 +133,31 @@ class Informations : Fragment(R.layout.fragment_informations) {
                     requiresReauth = true
                 }
             }
-
             if (nameEditText.visibility == View.VISIBLE) {
                 val newName = nameEditText.text.toString()
                 if (newName != nameTextView.text.toString()) {
                     updatedFields["name"] = newName
                 }
             }
-
             if (surnameEditText.visibility == View.VISIBLE) {
                 val newSurname = surnameEditText.text.toString()
                 if (newSurname != surnameTextView.text.toString()) {
                     updatedFields["surname"] = newSurname
                 }
             }
-
             if (phoneEditText.visibility == View.VISIBLE) {
-                val newPhone = phoneEditText.text.toString()
-                if (newPhone != phoneTextView.text.toString()) {
+                val newPhone = phoneEditText.text.toString().toLongOrNull()
+                val oldPhone = phoneTextView.text.toString().toLongOrNull()
+                if (newPhone != null && newPhone != oldPhone) {
                     updatedFields["phone"] = newPhone
                 }
             }
-
             if (dateEditText.visibility == View.VISIBLE) {
-                val newDate = dateEditText.text.toString()
-                if (newDate != dateTextView.text.toString()) {
+                val newDateStr = dateEditText.text.toString().replace("/", "")
+                val newDate = newDateStr.toIntOrNull()
+                val oldDateStr = dateTextView.text.toString().replace("/", "")
+                val oldDate = oldDateStr.toIntOrNull()
+                if (newDate != null && newDate != oldDate) {
                     updatedFields["date"] = newDate
                 }
             }
@@ -144,7 +175,6 @@ class Informations : Fragment(R.layout.fragment_informations) {
                                 viewModel.updateUserData(updatedFields, password) { success, errorMessage ->
                                     if (success) {
                                         Toast.makeText(context, "Information updated", Toast.LENGTH_SHORT).show()
-                                        saveButton.visibility = View.GONE
                                         reset()
                                     } else {
                                         Toast.makeText(context, "Update failed: $errorMessage", Toast.LENGTH_LONG).show()
@@ -161,7 +191,6 @@ class Informations : Fragment(R.layout.fragment_informations) {
                     viewModel.updateUserData(updatedFields, null) { success, errorMessage ->
                         if (success) {
                             Toast.makeText(context, "Information updated", Toast.LENGTH_SHORT).show()
-                            saveButton.visibility = View.GONE
                             reset()
                         } else {
                             Toast.makeText(context, "Update failed: $errorMessage", Toast.LENGTH_LONG).show()
@@ -192,9 +221,6 @@ class Informations : Fragment(R.layout.fragment_informations) {
         } else {
             textView.visibility = View.VISIBLE
             editText.visibility = View.GONE
-            if (!isEditMode()) {
-                binding.saveButton.visibility = View.GONE
-            }
         }
     }
 
@@ -225,5 +251,16 @@ class Informations : Fragment(R.layout.fragment_informations) {
             dateTextView.visibility = View.VISIBLE
             dateEditText.visibility = View.GONE
         }
+    }
+
+    private fun formatDateString(dateStr: String): String {
+        val inputNumbers = dateStr.replace("[^\\d]".toRegex(), "")
+        if (inputNumbers.length == 8) {
+            val day = inputNumbers.substring(0, 2)
+            val month = inputNumbers.substring(2, 4)
+            val year = inputNumbers.substring(4, 8)
+            return "$day/$month/$year"
+        }
+        return dateStr
     }
 }

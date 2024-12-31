@@ -1,12 +1,13 @@
-package com.tekin.reciper.ui.User
+package com.tekin.reciper.ui.User.others
 
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.tekin.reciper.R
-import com.tekin.reciper.UserViewModel
+import com.tekin.reciper.model.UserViewModel
 import com.tekin.reciper.databinding.FragmentManagementBinding
+import com.tekin.reciper.ui.User.UserNotSignedIn
 
 class Management : Fragment(R.layout.fragment_management) {
     private lateinit var binding: FragmentManagementBinding
@@ -16,25 +17,32 @@ class Management : Fragment(R.layout.fragment_management) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentManagementBinding.bind(view)
 
-        val btnMyInfos = binding.updateInformationsButton
-        val btnSignOut = binding.signoutButton
-        val btnBack = binding.backButton
+        val updateInformationsButton = binding.updateInformationsButton
+        val signoutButton = binding.signoutButton
+        val backButton = binding.backButton
+        val contactButton = binding.contactButton
 
-        btnMyInfos.setOnClickListener{
+        updateInformationsButton.setOnClickListener{
             parentFragmentManager.beginTransaction()
                 .replace(R.id.frame_layout, Informations())
                 .addToBackStack(null)
                 .commit()
         }
+        contactButton.setOnClickListener{
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.frame_layout, Contact())
+                .addToBackStack(null)
+                .commit()
+        }
 
-        btnSignOut.setOnClickListener{
+        signoutButton.setOnClickListener{
             viewModel.signOut()
             parentFragmentManager.beginTransaction()
                 .replace(R.id.frame_layout, UserNotSignedIn())
                 .commit()
         }
 
-        btnBack.setOnClickListener {
+        backButton.setOnClickListener {
             parentFragmentManager.popBackStack()
         }
     }

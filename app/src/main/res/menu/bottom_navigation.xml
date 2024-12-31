@@ -9,18 +9,17 @@
 
     <item
         android:id="@+id/nav_searchbutton"
-        android:icon="@drawable/nav_searchbut"
         android:title="Search"
-        app:actionViewClass="android.widget.SearchView" ></item>
+        android:icon="@drawable/nav_searchbut"
+        app:actionViewClass="android.widget.SearchView"/>
 
     <item
         android:id="@+id/nav_listbutton"
         android:title="List"
         android:icon="@drawable/nav_listbut"/>
+
     <item
         android:id="@+id/nav_settingsbutton"
-        android:icon="@drawable/nav_settingsbut"
-        android:title="Account" />
-<!--  Settings name changed with User  -->
-
+        android:title="Account"
+        android:icon="@drawable/nav_settingsbut"/>
 </menu>

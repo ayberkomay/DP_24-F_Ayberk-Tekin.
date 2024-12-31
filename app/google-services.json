@@ -3,7 +3,7 @@
     "project_number": "382139243984",
     "firebase_url": "https://reciper-9eba7-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "reciper-9eba7",
-    "storage_bucket": "reciper-9eba7.appspot.com"
+    "storage_bucket": "reciper-9eba7.firebasestorage.app"
   },
   "client": [
     {

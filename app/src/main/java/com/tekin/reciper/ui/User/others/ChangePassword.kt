@@ -1,4 +1,4 @@
-package com.tekin.reciper.ui.User
+package com.tekin.reciper.ui.User.others
 
 import android.os.Bundle
 import android.view.View
@@ -28,6 +28,16 @@ class ChangePassword : Fragment(R.layout.fragment_changepassword) {
             val newPassword = newPasswordEditText.text.toString()
             val confirmPassword = confirmPasswordEditText.text.toString()
 
+            if (oldPassword.isEmpty() || newPassword.isEmpty() || confirmPassword.isEmpty()) {
+                Toast.makeText(context, "Please fill in the fields", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (newPassword == oldPassword) {
+                Toast.makeText(context, "The new password cannot be the same as the old password", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             if (newPassword != confirmPassword) {
                 Toast.makeText(context, "Passwords do not match", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
@@ -43,7 +53,7 @@ class ChangePassword : Fragment(R.layout.fragment_changepassword) {
                                 Toast.makeText(context, "Password updated", Toast.LENGTH_SHORT).show()
                                 parentFragmentManager.popBackStack()
                             } else {
-                                Toast.makeText(context, "Error updating password", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, "Error updating password. Password must be at least 6 characters long.", Toast.LENGTH_SHORT).show()
                             }
                         }
                     } else {
