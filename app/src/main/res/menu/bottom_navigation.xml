@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_homebutton"
+        android:title="Home"
+        android:icon="@drawable/nav_homebut"/>
+
+    <item
+        android:id="@+id/nav_searchbutton"
+        android:title="Search"
+        android:icon="@drawable/nav_searchbut"
+        app:actionViewClass="android.widget.SearchView"/>
+
+    <item
+        android:id="@+id/nav_listbutton"
+        android:title="List"
+        android:icon="@drawable/nav_listbut"/>
+
+    <item
+        android:id="@+id/nav_settingsbutton"
+        android:title="Account"
+        android:icon="@drawable/nav_settingsbut"/>
+</menu>
