@@ -15,7 +15,7 @@ import com.tekin.reciper.databinding.FragmentRegisterBinding
 import com.tekin.reciper.ui.User.UserNotSignedIn
 import com.tekin.reciper.ui.User.UserSignedIn
 
-class Register : Fragment(R.layout.fragment_register){
+class Register : Fragment(R.layout.fragment_register) {
     private lateinit var binding: FragmentRegisterBinding
     private val viewModel: UserViewModel by activityViewModels()
 
@@ -105,9 +105,9 @@ class Register : Fragment(R.layout.fragment_register){
         }
 
         buttonRegister.setOnClickListener {
-
             val email = binding.textRegisterMail.text.toString().trim()
             val password = binding.textRegisterPassword.text.toString().trim()
+            val confirmPassword = binding.textRegisterConfirmPassword.text.toString().trim()
             val name = binding.textRegisterName.text.toString().trim()
             val surname = binding.textRegisterSurname.text.toString().trim()
             val phone = binding.textRegisterPhone.text.toString().trim()
@@ -118,7 +118,18 @@ class Register : Fragment(R.layout.fragment_register){
                 return@setOnClickListener
             }
 
-            if (email.isNotEmpty() && password.isNotEmpty() && name.isNotEmpty() && surname.isNotEmpty() && phone.isNotEmpty() && date.isNotEmpty()) {
+            if (password != confirmPassword) {
+                Toast.makeText(context, "Passwords do not match", Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
+
+            if (password.length < 6) {
+                Toast.makeText(context, "Password must be at least 6 characters long", Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
+
+            if (email.isNotEmpty() && password.isNotEmpty() && name.isNotEmpty() &&
+                surname.isNotEmpty() && phone.isNotEmpty() && date.isNotEmpty()) {
 
                 val phoneLong = phone.toLongOrNull()
                 val dateInt = parseDateInt(date)
@@ -142,6 +153,7 @@ class Register : Fragment(R.layout.fragment_register){
                 Toast.makeText(context, "Please fill in all fields.", Toast.LENGTH_LONG).show()
             }
         }
+
         buttonRegisterBack.setOnClickListener {
             parentFragmentManager.beginTransaction()
                 .replace(R.id.frame_layout, UserNotSignedIn())
