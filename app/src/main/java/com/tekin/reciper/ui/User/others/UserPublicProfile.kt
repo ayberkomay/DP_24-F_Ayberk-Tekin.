@@ -78,7 +78,7 @@ class UserPublicProfile : Fragment(R.layout.fragment_user_public_profile) {
             }
             loadPublicRecipes(id)
         } ?: run {
-            Toast.makeText(context, "Kullanıcı ID'si bulunamadı", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "User data not available", Toast.LENGTH_SHORT).show()
         }
     }
 
