@@ -12,8 +12,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import com.tekin.reciper.data.RecipeData
 import com.tekin.reciper.data.UserData
-import android.os.Handler
-import android.os.Looper
+
 
 class Section {
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
@@ -116,6 +115,28 @@ class Section {
             }
         } else {
             callback(false, "User is not authenticated")
+        }
+    }
+
+    fun changePassword(oldPassword: String, newPassword: String, callback: (Boolean, String?) -> Unit) {
+        val user = auth.currentUser
+        if (user != null && user.email != null) {
+            val credential = EmailAuthProvider.getCredential(user.email!!, oldPassword)
+            user.reauthenticate(credential).addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    user.updatePassword(newPassword).addOnCompleteListener { updateTask ->
+                        if (updateTask.isSuccessful) {
+                            callback(true, null)
+                        } else {
+                            callback(false, updateTask.exception?.message)
+                        }
+                    }
+                } else {
+                    callback(false, task.exception?.message)
+                }
+            }
+        } else {
+            callback(false, "User not logged in")
         }
     }
 

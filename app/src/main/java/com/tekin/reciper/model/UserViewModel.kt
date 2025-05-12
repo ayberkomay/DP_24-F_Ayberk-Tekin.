@@ -35,6 +35,10 @@ class UserViewModel : ViewModel() {
         section.updateUserData(updatedFields, password, callback)
     }
 
+    fun changePassword(oldPassword: String, newPassword: String, callback: (Boolean, String?) -> Unit) {
+        section.changePassword(oldPassword, newPassword, callback)
+    }
+
     fun uploadProfileImageUri(imageUri: Uri, callback: (Boolean, String?) -> Unit) {
         val userID = getCurrentUserID()
         if (userID == null) {

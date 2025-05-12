@@ -61,35 +61,33 @@ class Register : Fragment(R.layout.fragment_register) {
         textBirthDate.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
+            
             override fun afterTextChanged(s: Editable?) {
-                if (s.toString() != currentDate) {
-                    val inputNumbers = s.toString().replace("[^\\d]".toRegex(), "")
-                    if (inputNumbers.length <= 8) {
-                        val sb = StringBuilder()
-                        var index = 0
-                        for (i in dateDefault.indices) {
-                            if (index < inputNumbers.length) {
-                                sb.append(inputNumbers[index])
-                                index++
-                                if ((i == 1 || i == 3) && index < inputNumbers.length) {
-                                    sb.append("/")
-                                }
-                            } else {
-                                break
+                val inputNumbers = s.toString().replace("[^\\d]".toRegex(), "")
+                if (inputNumbers.length <= 8) {
+                    val sb = StringBuilder()
+                    var index = 0
+                    for (i in dateDefault.indices) {
+                        if (index < inputNumbers.length) {
+                            sb.append(inputNumbers[index])
+                            index++
+                            if ((i == 1 || i == 3) && index < inputNumbers.length) {
+                                sb.append("/")
                             }
+                        } else {
+                            break
                         }
-                        currentDate = sb.toString()
-                        textBirthDate.removeTextChangedListener(this)
-                        textBirthDate.setText(currentDate)
-                        textBirthDate.setSelection(currentDate.length)
-                        textBirthDate.addTextChangedListener(this)
-                    } else {
-                        textBirthDate.removeTextChangedListener(this)
-                        textBirthDate.setText(currentDate)
-                        textBirthDate.setSelection(currentDate.length)
-                        textBirthDate.addTextChangedListener(this)
                     }
+                    currentDate = sb.toString()
+                    textBirthDate.removeTextChangedListener(this)
+                    textBirthDate.setText(currentDate)
+                    textBirthDate.setSelection(currentDate.length)
+                    textBirthDate.addTextChangedListener(this)
+                } else {
+                    textBirthDate.removeTextChangedListener(this)
+                    textBirthDate.setText(currentDate)
+                    textBirthDate.setSelection(currentDate.length)
+                    textBirthDate.addTextChangedListener(this)
                 }
             }
         })

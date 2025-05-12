@@ -50,8 +50,10 @@ class Informations : Fragment(R.layout.fragment_informations) {
             private val dateDefault = "dd/MM/yyyy"
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            
+            override fun afterTextChanged(s: Editable?) {
                 if (s.toString() != current) {
                     val inputNumbers = s.toString().replace("[^\\d]".toRegex(), "")
                     if (inputNumbers.length <= 8) {
@@ -69,13 +71,18 @@ class Informations : Fragment(R.layout.fragment_informations) {
                             }
                         }
                         current = sb.toString()
+                        dateEditText.removeTextChangedListener(this)
                         dateEditText.setText(current)
                         dateEditText.setSelection(current.length)
+                        dateEditText.addTextChangedListener(this)
+                    } else {
+                        dateEditText.removeTextChangedListener(this)
+                        dateEditText.setText(current)
+                        dateEditText.setSelection(current.length)
+                        dateEditText.addTextChangedListener(this)
                     }
                 }
             }
-
-            override fun afterTextChanged(s: Editable?) {}
         })
 
         viewModel.currentUserData.observe(viewLifecycleOwner) { userData ->
@@ -221,16 +228,6 @@ class Informations : Fragment(R.layout.fragment_informations) {
         } else {
             textView.visibility = View.VISIBLE
             editText.visibility = View.GONE
-        }
-    }
-
-    private fun isEditMode(): Boolean {
-        with(binding) {
-            return emailEditText.visibility == View.VISIBLE ||
-                    nameEditText.visibility == View.VISIBLE ||
-                    surnameEditText.visibility == View.VISIBLE ||
-                    phoneEditText.visibility == View.VISIBLE ||
-                    dateEditText.visibility == View.VISIBLE
         }
     }
 

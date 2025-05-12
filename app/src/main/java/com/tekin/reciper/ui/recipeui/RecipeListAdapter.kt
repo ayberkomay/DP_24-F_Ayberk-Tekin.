@@ -54,12 +54,7 @@ class RecipeListAdapter(
                 }
 
                 recipeContainer.setOnClickListener {
-                    val fragment = RecipeDetailFragment.newInstance(recipe.recipeId!!)
-                    (root.context as? FragmentActivity)?.supportFragmentManager
-                        ?.beginTransaction()
-                        ?.replace(R.id.frame_layout, fragment)
-                        ?.addToBackStack(null)
-                        ?.commit()
+                    onRecipeClicked(recipe)
                 }
             }
         }
